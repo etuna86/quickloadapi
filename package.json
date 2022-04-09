@@ -1,0 +1,52 @@
+{
+  "name": "quickloadapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot --open --watch",
+    "build": "webpack --config webpack.config.js --mode production",
+    "httpsstart": "($env:HTTPS = 'true') -and (npm start)"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/plugin-transform-arrow-functions": "^7.12.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "axios": "^0.21.1",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "bootstrap": "^5.0.0-beta1",
+    "css-loader": "^4.2.0",
+    "file-loader": "^6.0.0",
+    "file-saver": "^2.0.5",
+    "html-webpack-plugin": "^4.3.0",
+    "http-proxy-middleware": "^2.0.3",
+    "mini-css-extract-plugin": "^1.3.3",
+    "postcss": "^8.2.1",
+    "postcss-loader": "^4.1.0",
+    "react": "^16.13.1",
+    "react-bootstrap": "^2.0.0-beta.0",
+    "react-bootstrap-icons": "^1.6.1",
+    "react-data-table-component": "^7.4.7",
+    "react-dom": "^16.13.1",
+    "react-pagination-list": "^1.0.8",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^1.2.1",
+    "styled-components": "^5.3.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "xlsx": "^0.18.3"
+  }
+}

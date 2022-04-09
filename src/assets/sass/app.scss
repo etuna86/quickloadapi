@@ -1,0 +1,60 @@
+@import "~bootstrap/scss/bootstrap";
+
+.products-page{
+    display: flex;
+    a{
+        text-decoration: none;
+    }
+    .product-box{
+        padding: 15px;
+        margin: 15px;
+        box-shadow: 1px -1px 5px 0px rgba(0,0,0,0.75);
+        -webkit-box-shadow: 1px -1px 5px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 1px -1px 5px 0px rgba(0,0,0,0.75);
+        border-radius: 5px;
+        transition: ease-in 0.2s;
+        &:hover{
+            margin:5px;
+        }
+        .product-img{
+            display: flex;
+            align-items: center;
+            img{
+                margin:auto;
+                height:200px;
+            }
+        }
+        .product-title{
+            display: flex;
+            align-items: center;
+            h3{
+                margin:15px auto;
+                color: #333;
+                text-decoration: none;
+            }
+        }
+        .product-price{
+            display: flex;
+            margin:5px auto;
+            align-items: center;
+            font-size:22px;
+            span{
+                color: #333;
+                text-decoration: none;
+                margin-left: auto;
+                
+            }
+            small{
+                color: #333;
+                text-decoration: none;
+                margin-right: auto;
+                margin-left: 5px
+            }
+           
+        }
+    }
+}
+.styles_kPagination__1qVvD .styles_kPaginationListItemVertical__q-2s5{
+    flex-wrap:wrap;
+    flex-direction: row !important;
+}
