@@ -41,7 +41,7 @@ function App(props) {
 
 
   useEffect(() => {
-   
+
     if (localStorage.getItem('searchdata')) {
       let searchData = JSON.parse(localStorage.getItem('searchdata'));
       setRadioValue(searchData.language);
@@ -156,9 +156,6 @@ function App(props) {
   }
 
   const tableSort = async (column, sortDirection) => {
-    /// reach out to some API and get new data using or sortField and sortDirection
-    // e.g. https://api.github.com/search/repositories?q=blog&sort=${column.sortField}&order=${sortDirection}
-
     console.warn("column: ", column.id)
     console.warn("sortDirection: ", sortDirection)
     let sortAsc = true;
@@ -168,7 +165,7 @@ function App(props) {
     else
       sortAsc = false;
     setCDefaultSortAsc(sortAsc);
-    getRepositories(`${searchName} in:name+language:${radioValue}`)
+    //getRepositories(`${searchName} in:name+language:${radioValue}`)
     localStorage.setItem('searchdata', JSON.stringify({ searchname: searchName, language: radioValue, cdefaultsortasc: sortAsc, columnid: column.id }))
   };
 
@@ -236,13 +233,13 @@ function App(props) {
                 </Form.Text>
               </Form.Group>
             </Form>
+            {console.warn("columnId:",columnId)}
             <DataTable
               columns={columns}
               data={repositories}
               onSort={tableSort}
               defaultSortAsc={cDefaultSortAsc}
               defaultSortFieldId={columnId}
-              sortServer
               pagination
 
             />
