@@ -1,57 +1,90 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
-import { connect } from "react-redux";
 import { Container, Row, Col, Form, ButtonGroup, ToggleButton, Spinner } from "react-bootstrap";
 import { axiosAT } from './redux1/actions/index.js';
 import DataTable from 'react-data-table-component';
-import axios from 'axios';
-import { responseInterceptor } from 'http-proxy-middleware';
-let customHistory = createBrowserHistory();
 
-axios.defaults.baseURL = 'https://api.github.com';
-var data = JSON.stringify({
-  "Username": "etuna86",
-  "Password": "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"
-});
+const radios = [
+  { name: 'JavaScript', value: 'JavaScript' },
+  { name: 'Python', value: 'Python' },
+  { name: 'Scala', value: 'Scala' },
+];
 
-var config = {
-  method: 'get',
-  headers: {
-    'Authorization': 'Basic ZXR1bmE4NjpnaHBfYWk2YWVTYUc0RVczVEJDU3lsVVNLelNEQ0pZZkxsMGlGZW9l',
-    'Content-Type': 'application/json'
+const arrayRepo = { repositoryid: 0, username: '', description: '', stars: 0, forks: 0, updatedate: 0 }
+const columns = [
+  {
+    id: 'repositoryid',
+    name: 'Repository ID',
+    selector: row => row.repositoryid,
+    sortable: true,
   },
-  data: data
-};
+  {
+    id: 'repositoryfullname',
+    name: 'Repository fullname',
+    selector: row => row.full_name,
+    sortable: true,
+  },
+  {
+    id: 'repositoryname',
+    name: 'Repository name',
+    selector: row => row.name,
+    sortable: true,
+  },
+  {
+    id: 'language',
+    name: 'language',
+    selector: row => row.language,
+    sortable: true,
+  },
+  {
+    id: 'username',
+    name: 'Username',
+    selector: row => row.username,
+    sortable: true,
+  },
+  {
+    id: 'description',
+    name: 'Description',
+    selector: row => row.description,
+    sortable: true,
+  },
+  {
+    id: 'stars',
+    name: 'Stars',
+    selector: row => row.stars,
+    sortable: true,
+  },
+  {
+    id: 'forks',
+    name: 'Forks',
+    selector: row => row.forks,
+    sortable: true,
+  },
+  {
+    id: 'updatedate',
+    name: 'Update Date',
+    selector: row => row.updatedate,
+    sortable: true,
+  },
+];
 
 
-function App(props) {
+function App() {
   const [repositories, setRepositories] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [columnId, setColumnId] = useState('');
-  const [cDefaultSortAsc, setCDefaultSortAsc] = useState(true);
+  const [cDefaultSortAsc, setCDefaultSortAsc] = useState(false);
   const [radioValue, setRadioValue] = useState('JavaScript');
   const [disabledBtn, setDisabledBtn] = useState(false);
 
-  const radios = [
-    { name: 'JavaScript', value: 'JavaScript' },
-    { name: 'Python', value: 'Python' },
-    { name: 'Scala', value: 'Scala' },
-  ];
-
-
   useEffect(() => {
-
     if (localStorage.getItem('searchdata')) {
       let searchData = JSON.parse(localStorage.getItem('searchdata'));
       setRadioValue(searchData.language);
       setSearchName(searchData.searchname);
       setColumnId(searchData.columnid);
       setCDefaultSortAsc(searchData.cdefaultsortasc);
-      console.warn("searchData: ", searchData);
-      getRepositories(`all+language:${searchData.language}`)
+      getRepositories(`${searchData.searchname} in:name+language:${searchData.language}`)
     } else {
-      console.warn("else: ");
       getRepositories(`all+language:${radioValue}`)
       localStorage.setItem('searchdata', JSON.stringify({ searchname: searchName, language: radioValue, cdefaultsortasc: cDefaultSortAsc, columnid: columnId }))
     }
@@ -59,71 +92,12 @@ function App(props) {
   }, []);
 
 
-  const arrayRepo = { repositoryid: 0, username: '', description: '', stars: 0, forks: 0, updatedate: 0 }
-
-  const columns = [
-    {
-      id: 'repositoryid',
-      name: 'Repository ID',
-      selector: row => row.repositoryid,
-      sortable: true,
-    },
-    {
-      id: 'repositoryfullname',
-      name: 'Repository fullname',
-      selector: row => row.full_name,
-      sortable: true,
-    },
-    {
-      id: 'repositoryname',
-      name: 'Repository name',
-      selector: row => row.name,
-      sortable: true,
-    },
-    {
-      id: 'language',
-      name: 'language',
-      selector: row => row.language,
-      sortable: true,
-    },
-    {
-      id: 'username',
-      name: 'Username',
-      selector: row => row.username,
-      sortable: true,
-    },
-    {
-      id: 'description',
-      name: 'Description',
-      selector: row => row.description,
-      sortable: true,
-    },
-    {
-      id: 'stars',
-      name: 'Stars',
-      selector: row => row.stars,
-      sortable: true,
-    },
-    {
-      id: 'forks',
-      name: 'Forks',
-      selector: row => row.forks,
-      sortable: true,
-    },
-    {
-      id: 'updatedate',
-      name: 'Update Date',
-      selector: row => row.updatedate,
-      sortable: true,
-    },
-  ];
 
   async function getRepositories(query) {
     setRepositories([]);
-    console.warn("query: ", query);
     setDisabledBtn(true);
-    await axios
-      .get(`/search/repositories?q=${query}`, config)
+    await axiosAT
+      .get(`/search/repositories?q=${query}`)
       .then((res) => {
         let description = '';
         Object.values(res.data.items).forEach(async resrow => {
@@ -144,20 +118,14 @@ function App(props) {
           }]);
         })
         setDisabledBtn(false);
-
-
       }).catch(
         function (error) {
           return Promise.reject(error)
         }
       );
-
-
   }
 
   const tableSort = async (column, sortDirection) => {
-    console.warn("column: ", column.id)
-    console.warn("sortDirection: ", sortDirection)
     let sortAsc = true;
     setColumnId(column.id);
     if (sortDirection == "asc")
@@ -165,10 +133,8 @@ function App(props) {
     else
       sortAsc = false;
     setCDefaultSortAsc(sortAsc);
-    //getRepositories(`${searchName} in:name+language:${radioValue}`)
     localStorage.setItem('searchdata', JSON.stringify({ searchname: searchName, language: radioValue, cdefaultsortasc: sortAsc, columnid: column.id }))
   };
-
 
   function searchOnChange(e) {
     e.preventDefault();
@@ -191,7 +157,19 @@ function App(props) {
   }
 
 
+function GetDataTable(){
+  return(
+    <DataTable
+    columns={columns}
+    data={repositories}
+    onSort={tableSort}
+    defaultSortAsc={cDefaultSortAsc}
+    defaultSortFieldId={columnId}
+    pagination
 
+  />
+  )
+}
 
   return (
     <div>
@@ -228,21 +206,9 @@ function App(props) {
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Search</Form.Label>
                 <Form.Control type="text" placeholder="Search" value={searchName} onChange={(e) => searchOnChange(e)} />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
               </Form.Group>
             </Form>
-            {console.warn("columnId:",columnId)}
-            <DataTable
-              columns={columns}
-              data={repositories}
-              onSort={tableSort}
-              defaultSortAsc={cDefaultSortAsc}
-              defaultSortFieldId={columnId}
-              pagination
-
-            />
+              <GetDataTable />
           </Col>
         </Row>
       </Container>
